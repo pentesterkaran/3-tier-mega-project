@@ -47,7 +47,39 @@ pipeline {
                 }
             }
         }
-        
+        stage('Trivy File System Scan') {
+            steps {
+                sh 'trivy fs --format table -o fs-report.html .'
+            }
+        }
+        stage('Docker backend image build & Push to DockerHub') {
+            steps {
+                dir('api') {
+                withDockerRegistry(credentialsId: 'dockerhub-keys', url: 'https://index.docker.io/v1/') {
+                    sh 'docker build -t deploykarle/devshakops:backend .'
+                    sh 'trivy image --format table -o backend-image-report.html deploykarle/devshakops:backend'
+                    sh 'docker push deploykarle/devshakops:backend'
+                }
+            }
+            }
+        }
+        stage('Docker frontend image build & Push to DockerHub') {
+            steps {
+                dir('client') {
+                withDockerRegistry(credentialsId: 'dockerhub-keys', url: 'https://index.docker.io/v1/') {
+                    sh 'docker build -t deploykarle/devshakops:frontend .'
+                    sh 'trivy image --format table -o frontend-image-report.html deploykarle/devshakops:frontend'
+                    sh 'docker push deploykarle/devshakops:frontend'
+                }
+            }
+            }
+        }
+        stage('Starting Application using docker compose') {
+            steps {
+                sh 'docker compose down'
+                sh 'docker compose up -d --build'
+            }
+        }
         
     }
 }
