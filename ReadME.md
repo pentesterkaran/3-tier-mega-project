@@ -12,7 +12,7 @@ This project demonstrates real-world DevOps, DevSecOps, Kubernetes, and Cloud En
 
 ---
 
-## 🎯 Project Objective
+## Project Objective
 
 The goal of this project was to design and implement a production-style cloud-native platform that provides:
 
@@ -33,25 +33,25 @@ The AWS infrastructure is provisioned entirely using Terraform.
 
 ### Components Provisioned
 
-✅ Custom VPC
+Custom VPC
 
-✅ Public Subnets
+Public Subnets
 
-✅ Private Subnets
+Private Subnets
 
-✅ Internet Gateway
+Internet Gateway
 
-✅ NAT Gateway
+NAT Gateway
 
-✅ Route Tables
+Route Tables
 
-✅ Security Groups
+Security Groups
 
-✅ IAM Roles & Policies
+IAM Roles & Policies
 
-✅ Amazon EKS Cluster
+Amazon EKS Cluster
 
-✅ Managed Node Groups
+Managed Node Groups
 
 ---
 
