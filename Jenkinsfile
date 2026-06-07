@@ -74,13 +74,31 @@ pipeline {
             }
             }
         }
-        stage('Starting Application using docker compose') {
+        stage('Deploy to EKS') {
+            agent {
+                label 'bastion'
+            }
             steps {
-                sh 'docker compose down'
-                sh 'docker compose up -d --build'
+                git branch: 'main', url: 'https://github.com/pentesterkaran/3-tier-mega-project.git'
+                sh 'kubectl get nodes'
+                sh 'kubectl apply -f kubernetes-manifests/namespace.yml'
+                sh 'kubectl apply -f kubernetes-manifests/storageclass.yml'
+                sh 'kubectl apply -f kubernetes-manifests/configmap.yml'
+                sh 'kubectl apply -f kubernetes-manifests/secrets.yml'
+                sh 'kubectl apply -f kubernetes-manifests/initdb-configmap.yml'
+                sh 'kubectl apply -f kubernetes-manifests/db.yml'
+                sh 'kubectl apply -f kubernetes-manifests/'
+            }
+        }
+        
+        stage('Checking Deployment') {
+            agent {
+                label 'bastion'
+            }
+            steps {
+                sh 'kubectl get all -n devshakops'
             }
         }
         
     }
 }
-
